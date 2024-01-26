@@ -134,18 +134,30 @@ class BigramLanguageModel(nn.Module):
         return logits, loss
 
     def generate(self, idx, max_new_tokens):
-        # idx is (B, T) array of indices in the current context
-        for _ in range(max_new_tokens):
-            # crop idx to the last block_size tokens
-            idx_cond = idx[:, -self.config.block_size :]
-            # get the predictions
-            logits, loss = self(idx_cond)
-            # focus only on the last time step
-            logits = logits[:, -1, :]  # becomes (B, C)
-            # apply softmax to get probabilities
-            probs = F.softmax(logits, dim=-1)  # (B, C)
-            # sample from the distribution
-            idx_next = torch.multinomial(probs, num_samples=1)  # (B, 1)
-            # append sampled index to the running sequence
-            idx = torch.cat((idx, idx_next), dim=1)  # (B, T+1)
+        """
+        Generate text from the model.
+
+        :param idx: Initial context (encoded prompt) as a tensor of shape (B, T) where B is batch size and T is sequence length.
+        :param max_new_tokens: Maximum number of new tokens to generate.
+        """
+        # idx already contains the initial context (encoded prompt)
+        # No need to generate if max_new_tokens is 0
+        if max_new_tokens <= 0:
+            return idx
+
+        with torch.no_grad():
+            for _ in range(max_new_tokens):
+                # Crop idx to the last block_size tokens
+                idx_cond = idx[:, -self.config.block_size :]
+                # Get the predictions
+                logits, _ = self(idx_cond)
+                # Focus only on the last time step
+                logits = logits[:, -1, :]  # becomes (B, C)
+                # Apply softmax to get probabilities
+                probs = F.softmax(logits, dim=-1)  # (B, C)
+                # Sample from the distribution
+                idx_next = torch.multinomial(probs, num_samples=1)  # (B, 1)
+                # Append sampled index to the running sequence
+                idx = torch.cat((idx, idx_next), dim=1)  # (B, T+1)
+
         return idx
