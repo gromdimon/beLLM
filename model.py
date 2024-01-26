@@ -24,9 +24,7 @@ class Head(nn.Module):
         self.value = nn.Linear(self.config.n_embd, head_size, bias=False)
         self.register_buffer(
             "tril",
-            torch.tril(
-                torch.ones(self.config.block_size, self.config.block_size)
-            ),
+            torch.tril(torch.ones(self.config.block_size, self.config.block_size)),
         )
 
         self.dropout = nn.Dropout(self.config.dropout)
@@ -36,12 +34,8 @@ class Head(nn.Module):
         k = self.key(x)  # (B,T,C)
         q = self.query(x)  # (B,T,C)
         # compute attention scores ("affinities")
-        wei = (
-            q @ k.transpose(-2, -1) * C**-0.5
-        )  # (B, T, C) @ (B, C, T) -> (B, T, T)
-        wei = wei.masked_fill(
-            self.tril[:T, :T] == 0, float("-inf")
-        )  # (B, T, T)
+        wei = q @ k.transpose(-2, -1) * C**-0.5  # (B, T, C) @ (B, C, T) -> (B, T, T)
+        wei = wei.masked_fill(self.tril[:T, :T] == 0, float("-inf"))  # (B, T, T)
         wei = F.softmax(wei, dim=-1)  # (B, T, T)
         wei = self.dropout(wei)
         # perform the weighted aggregation of the values
@@ -56,9 +50,7 @@ class MultiHeadAttention(nn.Module):
     def __init__(self, config, num_heads, head_size):
         super().__init__()
         self.config = config
-        self.heads = nn.ModuleList(
-            [Head(config, head_size) for _ in range(num_heads)]
-        )
+        self.heads = nn.ModuleList([Head(config, head_size) for _ in range(num_heads)])
         self.proj = nn.Linear(self.config.n_embd, self.config.n_embd)
         self.dropout = nn.Dropout(self.config.dropout)
 
@@ -109,17 +101,11 @@ class BigramLanguageModel(nn.Module):
         super().__init__()
         self.config = config
         # each token directly reads off the logits for the next token from a lookup table
-        self.token_embedding_table = nn.Embedding(
-            self.config.vocab_size, self.config.n_embd
-        )
-        self.position_embedding_table = nn.Embedding(
-            self.config.block_size, self.config.n_embd
-        )
+        self.token_embedding_table = nn.Embedding(self.config.vocab_size, self.config.n_embd)
+        self.position_embedding_table = nn.Embedding(self.config.block_size, self.config.n_embd)
         self.blocks = nn.Sequential(
             *[
-                Block(
-                    self.config, self.config.n_embd, n_head=self.config.n_head
-                )
+                Block(self.config, self.config.n_embd, n_head=self.config.n_head)
                 for _ in range(self.config.n_layer)
             ]
         )
@@ -131,9 +117,7 @@ class BigramLanguageModel(nn.Module):
 
         # idx and targets are both (B,T) tensor of integers
         tok_emb = self.token_embedding_table(idx)  # (B,T,C)
-        pos_emb = self.position_embedding_table(
-            torch.arange(T, device=self.config.device)
-        )  # (T,C)
+        pos_emb = self.position_embedding_table(torch.arange(T, device=self.config.device))  # (T,C)
         x = tok_emb + pos_emb  # (B,T,C)
         x = self.blocks(x)  # (B,T,C)
         x = self.ln_f(x)  # (B,T,C)

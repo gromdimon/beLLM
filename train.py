@@ -2,15 +2,16 @@
 This file is used to train the model.
 """
 
-import time
-import torch
 import logging
-from model import BigramLanguageModel
+import time
+
+import torch
 from pydantic import BaseModel
 
+from model import BigramLanguageModel
 
 # Setting up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # -----------
 # # Hyperparameters
@@ -26,6 +27,7 @@ NUMBER_OF_HEADS = 8
 NUMBER_OF_LAYERS = 8
 DROPOUT = 0.0
 # -----------
+
 
 #: Configuration for the model
 class Config(BaseModel):
@@ -98,9 +100,7 @@ if __name__ == "__main__":
     # Encoding
     stoi = {ch: i for i, ch in enumerate(chars)}
     itos = {i: ch for i, ch in enumerate(chars)}
-    encode = lambda s: [
-        stoi[c] for c in s
-    ]  # encoder: take a string and return numerical values
+    encode = lambda s: [stoi[c] for c in s]  # encoder: take a string and return numerical values
     decode = lambda l: "".join(
         [itos[i] for i in l]
     )  # decoder: take a list of integers and return a corresponding string
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     # create the model
     model = BigramLanguageModel(config=config).to(config.device)
     logging.info(f"{sum(p.numel() for p in model.parameters()) / 1e6} M parameters")
-    
+
     # create the optimizer
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
 
@@ -135,9 +135,7 @@ if __name__ == "__main__":
         # save the model parameters
         if iter % 2000 == 0 or iter == config.max_iters - 1:
             time_elapsed = time.time() - start_train_time
-            logging.info(
-                "Iteration {} completed in {:.2f}s".format(iter, time_elapsed)
-            )
+            logging.info("Iteration {} completed in {:.2f}s".format(iter, time_elapsed))
             torch.save(model.state_dict(), f"models/model_{iter}.pt")
 
         # sample a batch of data
