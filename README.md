@@ -22,9 +22,8 @@ were collected from different sources. For more information about the dataset, p
 ## Project Overview
 
 The beLLM is a character-level language model trained on a collection of belarusian poems and prose.
-First inspired by the [nanoGPT](https://github.com/karpathy/nanoGPT) by `Andrej Karpathy`.
-The model architecture is based on the [GPT-2](https://github.com/openai/gpt-2) by `OpenAI`. 
-The data was manually collected and preprocessed. The model was trained on a single GPU GeForce GTX 1080 Ti for 1000 epochs.
+First inspired by the [nanoGPT](https://github.com/karpathy/nanoGPT) by `Andrej Karpathy`, the model architecture was based on the [GPT-2](https://github.com/openai/gpt-2) by `OpenAI`. 
+The data for training was manually collected and preprocessed. The model was trained on a single GPU GeForce GTX 1080 Ti for 1000 epochs.
 
 This repository contains the following core folders&files:
 - `model.py`: The main file with the model architecture and training loop.
@@ -34,6 +33,10 @@ This repository contains the following core folders&files:
 - `assets/`: The folder with the images for the README.md.
 - `generations/`: The folder with the generated text.
 - `models/`: The folder with the results of the training.
+
+The results of the training are available in the `models/` folder. The model weights are available on the [HuggingFace](https://huggingface.co/gromdimon/beLLM) model hub. Here is screenshot of the training process:
+
+![training](assets/training.png)
 
 
 ## Technologies Used
@@ -113,7 +116,7 @@ make lint
 
 ## Dataset
 
-The dataset was collected from different sources and manually preprocessed. The dataset contains over 9.5 million characters. The dataset is available in the `data/` folder. The dataset includes the following sources:
+The dataset was collected from different sources and manually preprocessed. It contains over 9.5 million characters and is available in the `data/` folder. The dataset includes the following sources:
 
 - [Belaruskaja Palichka](https://knihi.com/)
 - [Ejka](https://ejka.ru/)
@@ -142,3 +145,4 @@ Big thanks to the following people for their work and inspiration:
 
 - [Andrej Karpathy](https://github.com/karpathy) for the [nanoGPT](https://github.com/karpathy/nanoGPT)
 - Anastasija Yashina for creating the dataset
+- [ChatGPT](https://chat.openai.com/) for generating the header image
