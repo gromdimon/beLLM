@@ -2,25 +2,27 @@
 This file is used to run the model.
 """
 
-import time
 import logging
+import time
+
 import torch
+
 from model import BigramLanguageModel
 from train import config
 
 # Setting up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 if __name__ == "__main__":
     start_time = time.time()
     logging.info("Loading model...")
     logging.info("Config: %s", config)
-    
+
     # load the dataset
     with open("data/data.txt", "r") as f:
         text = f.read()
     chars = sorted(list(set(text)))
-    
+
     # Encoding
     stoi = {ch: i for i, ch in enumerate(chars)}
     itos = {i: ch for i, ch in enumerate(chars)}

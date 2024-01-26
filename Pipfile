@@ -7,6 +7,10 @@ name = "pypi"
 torch = "*"
 pydantic = "*"
 numpy = "*"
+isort = "*"
+flake8 = "*"
+mypy = "*"
+black = {version = "*", extras = ["jupyter"]}
 
 [dev-packages]
 
