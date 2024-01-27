@@ -149,4 +149,3 @@ Big thanks to the following people for their work and inspiration:
 - [Andrej Karpathy](https://github.com/karpathy) for the [nanoGPT](https://github.com/karpathy/nanoGPT)
 - Anastasia Yashina for creating the dataset
 - [ChatGPT](https://chat.openai.com/) for generating the header image
-
