@@ -23,7 +23,7 @@ were collected from different sources. For more information about the dataset, p
 
 The beLLM is a character-level language model trained on a collection of belarusian poems and prose.
 First inspired by the [nanoGPT](https://github.com/karpathy/nanoGPT) by `Andrej Karpathy`, the model architecture was based on the [GPT-2](https://github.com/openai/gpt-2) by `OpenAI`. 
-The data for training was manually collected and preprocessed. The model was trained on a single GPU GeForce GTX 1080 Ti for 1000 epochs.
+The data for training was manually collected and preprocessed. The model was trained on a single GPU GeForce GTX 1080 Ti for 10000 epochs.
 
 
 This repository contains the following core folders&files:
